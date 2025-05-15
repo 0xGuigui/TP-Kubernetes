@@ -16,7 +16,7 @@ kubectl create secret generic minecraft-secrets \
     --from-file=whitelist.json=../config/whitelist.json \
     --dry-run=client -o yaml | kubectl apply -f -
 echo "Déploiement du chart Minecraft..."
-helm upgrade --install minecraft ./helm-chart-minecraft \
-    --values ./helm-chart-minecraft/values.yaml
+helm upgrade --install minecraft ../helm \
+    --values ../helm/values.yaml
 echo ""
 echo "Serveur Minecraft déployé avec succès via Helm !"
