@@ -6,8 +6,8 @@
 - [X] Vérifier que `kubectl` est bien configuré et fonctionne avec le cluster
 - [X] Installer Helm sur ma machine (Linux / Mac / Windows)
 - [X] Créer le secret `minecraft-secrets` avec l’EULA, la whitelist et la blacklist
-- [X] Créer ou adapter un chart Helm pour le serveur Minecraft
-  - [X] Configurer la mémoire, CPU, whitelist/blacklist, EULA dans `values.yaml`
+- [ ] Créer ou adapter un chart Helm pour le serveur Minecraft
+  - [ ] Configurer la mémoire, CPU, whitelist/blacklist, EULA dans `values.yaml`
   - [ ] Ajouter les probes `livenessProbe` et `readinessProbe` (TCP port 25565)
 - [ ] Déployer le serveur Minecraft via Helm
 - [ ] Vérifier le déploiement avec `kubectl get pods` et les logs
