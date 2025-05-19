@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "minecraft-server.fullname" . }}
+  labels:
+    app: {{ include "minecraft-server.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "minecraft-server.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "minecraft-server.name" . }}
+    spec:
+      containers:
+        - name: minecraft-server
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 25565
+          env:
+            - name: EULA
+              value: "{{ .Values.eula | quote }}"
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory | quote }}
+              cpu: {{ .Values.resources.requests.cpu | quote }}
+            limits:
+              memory: {{ .Values.resources.limits.memory | quote }}
+              cpu: {{ .Values.resources.limits.cpu | quote }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.livenessProbe.tcpSocket.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.readinessProbe.tcpSocket.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          volumeMounts:
+            - name: whitelist
+              mountPath: /data/whitelist.json
+              subPath: whitelist.json
+            - name: blacklist
+              mountPath: /data/blacklist.json
+              subPath: blacklist.json
+      volumes:
+        - name: whitelist
+          secret:
+            secretName: {{ .Values.whitelistSecret }}
+            items:
+              - key: whitelist.json
+                path: whitelist.json
+        - name: blacklist
+          secret:
+            secretName: {{ .Values.blacklistSecret }}
+            items:
+              - key: blacklist.json
+                path: blacklist.json
